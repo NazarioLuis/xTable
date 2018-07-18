@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -19,6 +18,7 @@ public class AwesomeTable extends JTable {
 	private static final long serialVersionUID = -1835257686646299108L;
 	private GenericTableModel model;
 	private List<Map<String, Object>> conditions = new ArrayList<Map<String,Object>>();
+	private int widthArray[];
 	
 	public AwesomeTable() {
 		this.model = new GenericTableModel();
@@ -35,7 +35,6 @@ public class AwesomeTable extends JTable {
 	public void setData(List<?> list) {
 		model.setList(list);
 		model.fireTableDataChanged();
-		resizeTableColumnWidth();
 	}
 	
 	public void addConditions(int columnIndex, Color color, Comparison comparison, Object value1, Object value2) {
@@ -71,37 +70,20 @@ public class AwesomeTable extends JTable {
 		return attributes;
 	}
 	
-	private void resizeTableColumnWidth() {
-		new Timer().schedule( 
-	        new java.util.TimerTask() {
-	            @Override
-	            public void run() {
-	               changeColumnWidth();
-	            }
-	        }, 
-	        300 
-		);
-	}
-	
-	private void changeColumnWidth() {
-		for (int column = 0; column < this.getColumnCount(); column++) {
-	        int width = 15; // Min width
-	        for (int row = 0; row < this.getRowCount(); row++) {
-	            TableCellRenderer renderer = this.getCellRenderer(row, column);
-	            Component comp = this.prepareRenderer(renderer, row, column);
-	            width = Math.max(comp.getPreferredSize().width +1 , width);
-	        }
-	        columnModel.getColumn(column).setPreferredWidth(width);
-	    }
-	}
-	
 	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
 	{
 		Component c = super.prepareRenderer(renderer, row, column);
-
+		if (row == 0) {
+			if(column == 0) widthArray = new int[this.getColumnCount()];
+			widthArray[column] = 15;
+		}
+		widthArray[column] = Math.max(c.getPreferredSize().width +1 , widthArray[column]);
+		
+		if (row == this.getRowCount()-1) {
+			columnModel.getColumn(column).setPreferredWidth(widthArray[column]);
+		}
 		checkConditios(c, row);
-
 		return c;
 	}	
 

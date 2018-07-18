@@ -116,7 +116,7 @@ public enum Comparison {
 		}else if(a.getClass() == Boolean.class){
 			return apply(getComparable(a),getBooleanValue(b));
 		}else if(a.getClass() == Date.class){
-			return apply(getComparable(getDateOnly(b)),getDateOnly(b));
+			return apply(getComparable(getDateOnly(a)),getDateOnly(b));
 		}else{
 			return apply(getComparable(a.toString()),b.toString());
 		}
@@ -134,7 +134,7 @@ public enum Comparison {
 		}else if(a.getClass() == Boolean.class){
 			return apply(getComparable(a),getBooleanValue(b),getBooleanValue(c));
 		}else if(a.getClass() == Date.class){
-			return apply(getComparable(getDateOnly(b)),getDateOnly(b),getDateOnly(c));
+			return apply(getComparable(getDateOnly(a)),getDateOnly(b),getDateOnly(c));
 		}else{
 			return apply(getComparable(a.toString()),b.toString(),c.toString());
 		}
@@ -173,6 +173,7 @@ public enum Comparison {
 	}
      
     protected Date getDateOnly(Object o) {
+    	//System.out.println(o);
     	String str = null;
     	if(o.getClass() == Date.class){
     		str = dateFormat.format(o);
