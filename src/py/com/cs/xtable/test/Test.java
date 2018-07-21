@@ -13,7 +13,7 @@ public class Test {
 		String columns[] = {
 					"id",
 					"firstName+lastName=>Nombre y Apellido",
-					"birthdate=>Fecha de Nac.",
+					"birthDate",
 					"credit=>Crédito",
 					"address=>Dirección",
 					"active=>Activo"
@@ -34,7 +34,7 @@ public class Test {
 		customer.setId(1);
 		customer.setFirstName("Name1");
 		customer.setLastName("LastName1");
-		customer.setBirthdate(new Date());
+		customer.setBirthDate(new Date());
 		customer.setActive(true);
 		customer.setCredit(8000d);
 		customers.add(customer);
@@ -43,7 +43,7 @@ public class Test {
 		customer1.setId(2);
 		customer1.setAddress("Address2");
 		customer1.setFirstName("Name2");
-		customer1.setBirthdate(new Date());
+		customer1.setBirthDate(new Date());
 		customer1.setLastName("LastName2");
 		customer1.setActive(true);
 		customer1.setCredit(100000d);
@@ -53,7 +53,7 @@ public class Test {
 		customer2.setId(3);
 		customer2.setFirstName("Name3");
 		customer2.setLastName("LastName3");
-		customer2.setBirthdate(new Date());
+		customer2.setBirthDate(new Date());
 		customer2.setAddress("Address3");
 		customer2.setActive(false);
 		customers.add(customer2);

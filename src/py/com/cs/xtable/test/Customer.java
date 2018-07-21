@@ -6,7 +6,7 @@ public class Customer {
 	private int id;
 	private String firstName;
 	private String lastName;
-	private Date birthdate;
+	private Date birthDate;
 	private String address;
 	private boolean active;
 	private double credit;
@@ -14,11 +14,11 @@ public class Customer {
 	public double getCredit() {
 		return credit;
 	}
-	public Date getBirthdate() {
-		return birthdate;
+	public Date getBirthDate() {
+		return birthDate;
 	}
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 	public void setCredit(double credit) {
 		this.credit = credit;

@@ -54,7 +54,13 @@ public class AwesomeTable extends JTable {
 		for (int i = 0; i < newColumns.length; i++) {
 			String[] parts = columns[i].split("=>");
 			if(parts.length > 1) newColumns[i] = parts[1].toUpperCase();
-			else newColumns[i] = parts[0].toUpperCase();
+			else {
+				parts = parts[0].split("(?=\\p{Upper})");
+				for (int j = 0; j < parts.length; j++) {
+					if(j==0) newColumns[i] = parts[j].toUpperCase();
+					else newColumns[i] = newColumns[i]+" "+parts[j].toUpperCase();
+				}
+			}
 		}
 		return newColumns;
 	}
