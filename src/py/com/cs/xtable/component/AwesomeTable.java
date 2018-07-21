@@ -28,13 +28,11 @@ public class AwesomeTable extends JTable {
 	public void config(String[] columns) {
 		model.setColumns(getAttributes(columns));
 		model.setColumnsNames(getColumns(columns));
-
-		model.fireTableStructureChanged();
 	}
 	
 	public void setData(List<?> list) {
 		model.setList(list);
-		model.fireTableDataChanged();
+		model.fireTableStructureChanged();
 	}
 	
 	public void addConditions(int columnIndex, Color color, Comparison comparison, Object value1, Object value2) {

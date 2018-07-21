@@ -54,6 +54,9 @@ public class GenericTableModel extends AbstractTableModel{
 				if(val == null) val = field.get(list.get(r));
 				else val += " " + field.get(list.get(r));
 			}
+			if (c==0) {
+				System.out.println(val);
+			}
 			return val;
 		} catch (Exception e) {
 			e.printStackTrace();

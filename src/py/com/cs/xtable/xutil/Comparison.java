@@ -1,5 +1,6 @@
 package py.com.cs.xtable.xutil;
 
+import java.security.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -84,7 +85,10 @@ public enum Comparison {
 	};
 
     private final String value;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat dateFormat[] = {
+    		new SimpleDateFormat("yyyy-MM-dd"),
+    		new SimpleDateFormat("dd/MM/yyyy")
+    };
   
     
     public String getValue() {
@@ -105,7 +109,10 @@ public enum Comparison {
     }
 
 	public boolean compare(Object a, Object b) {
-		if(a.getClass() != Date.class && a.getClass() == WraperUtil.wrap(b.getClass())){
+		if(a.getClass() != Date.class 
+				&& a.getClass() != Timestamp.class 
+				&& a.getClass() != java.sql.Date.class 
+				&& a.getClass() == WraperUtil.wrap(b.getClass())){
 			return apply(getComparable(a), b);
 		}else if(a.getClass() == Double.class || a.getClass() == Float.class){
 			return apply(getComparable(a),getDoubleValue(b));
@@ -115,7 +122,9 @@ public enum Comparison {
 			return apply(getComparable(a),getLongValue(b));
 		}else if(a.getClass() == Boolean.class){
 			return apply(getComparable(a),getBooleanValue(b));
-		}else if(a.getClass() == Date.class){
+		}else if(a.getClass() == Date.class 
+				|| a.getClass() == Timestamp.class
+				|| a.getClass() == java.sql.Date.class){
 			return apply(getComparable(getDateOnly(a)),getDateOnly(b));
 		}else{
 			return apply(getComparable(a.toString()),b.toString());
@@ -123,7 +132,11 @@ public enum Comparison {
 	}
 	
 	public boolean compare(Object a, Object b, Object c) {
-		if(a.getClass() != Date.class && a.getClass() == WraperUtil.wrap(b.getClass()) && a.getClass() == WraperUtil.wrap(c.getClass())){
+		if(a.getClass() != Date.class 
+				&& a.getClass() != Timestamp.class 
+				&& a.getClass() != java.sql.Date.class 
+				&& a.getClass() == WraperUtil.wrap(b.getClass()) 
+				&& a.getClass() == WraperUtil.wrap(c.getClass())){
 			return apply(getComparable(a), b , c);
 		}else if(a.getClass() == Double.class || a.getClass() == Float.class){
 			return apply(getComparable(a),getDoubleValue(b),getDoubleValue(c));
@@ -133,7 +146,9 @@ public enum Comparison {
 			return apply(getComparable(a),getLongValue(b),getLongValue(c));
 		}else if(a.getClass() == Boolean.class){
 			return apply(getComparable(a),getBooleanValue(b),getBooleanValue(c));
-		}else if(a.getClass() == Date.class){
+		}else if(a.getClass() == Date.class 
+				|| a.getClass() == Timestamp.class
+				|| a.getClass() == java.sql.Date.class){
 			return apply(getComparable(getDateOnly(a)),getDateOnly(b),getDateOnly(c));
 		}else{
 			return apply(getComparable(a.toString()),b.toString(),c.toString());
@@ -173,18 +188,18 @@ public enum Comparison {
 	}
      
     protected Date getDateOnly(Object o) {
-    	//System.out.println(o);
     	String str = null;
     	if(o.getClass() == Date.class){
-    		str = dateFormat.format(o);
+    		str = dateFormat[0].format(o);
     	}else{
     		str = o.toString();
     	}
-    	try {
-			return dateFormat.parse(str);
-		} catch (ParseException e) {
-			return null;
-		}		
+    	for (int i = 0; i < dateFormat.length; i++) {
+    		try {
+    			return dateFormat[i].parse(str);
+    		} catch (ParseException e) {}	
+		}	
+    	return null;
 	}
     
 }
