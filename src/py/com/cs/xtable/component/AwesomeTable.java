@@ -35,7 +35,7 @@ public class AwesomeTable extends JTable {
 		model.fireTableStructureChanged();
 	}
 	
-	public void addConditions(int columnIndex, Color color, Comparison comparison, Object value1, Object value2) {
+	public void addCondition(int columnIndex, Color color, Comparison comparison, Object value1, Object value2) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("index", columnIndex);
 		map.put("color", color);
@@ -45,8 +45,8 @@ public class AwesomeTable extends JTable {
 		conditions.add(map);
 	}
 	
-	public void addConditions(int columnIndex, Color color, Comparison comparison, Object value1) {
-		addConditions(columnIndex, color, comparison, value1, null);
+	public void addCondition(int columnIndex, Color color, Comparison comparison, Object value1) {
+		addCondition(columnIndex, color, comparison, value1, null);
 	}
 
 	private String[] getColumns(String[] columns) {

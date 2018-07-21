@@ -26,7 +26,7 @@ public class Test {
 		
 		testView.getTable().config(columns);
 		
-		testView.getTable().addConditions(2, Color.green, Comparison.EQ, "2018-07-21");
+		testView.getTable().addCondition(2, Color.green, Comparison.EQ, "2018-07-21");
 
 		List<Customer> customers = new ArrayList<>();
 		
