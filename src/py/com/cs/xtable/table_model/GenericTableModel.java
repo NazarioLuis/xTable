@@ -20,6 +20,10 @@ public class GenericTableModel extends AbstractTableModel{
 		this.list = list;
 	}
 	
+	public Object getColumnValue(int r,Object c) {
+		return getValue(r, c);
+	}
+	
 	public void setColumns(String[] columns) {
 		this.columns = columns;
 	}
@@ -45,8 +49,15 @@ public class GenericTableModel extends AbstractTableModel{
 	
 	@Override
 	public Object getValueAt(int r, int c) {
+		return getValue(r,c);
+	}
+
+	private Object getValue(int r, Object c) {
 		try {
-			String attrs[] = columns[c].replace("+", " ").split(" ");
+			String attrs[] = null;
+			if(c.getClass() == String.class) attrs = ((String) c).replace("+", " ").split(" ");
+			else attrs = columns[(int) c].replace("+", " ").split(" ");
+			
 			Object val = null;
 			for (int i = 0; i < attrs.length; i++) {
 				Field field = list.get(r).getClass().getDeclaredField(attrs[i]);
@@ -57,10 +68,10 @@ public class GenericTableModel extends AbstractTableModel{
 			return val;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return new Object();
 		}
 	}
-	
+
 	@Override
 	public Class<?> getColumnClass(int c) {
 		if(list !=null && list.size()>0){

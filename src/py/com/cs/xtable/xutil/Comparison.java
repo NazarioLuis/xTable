@@ -9,7 +9,9 @@ public enum Comparison {
     EQ("=") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) == 0;
+			if(a==null) return b == null;
+			else if(b==null) return a == null;
+			else return a.compareTo(b) == 0;
 		}
 
 		@Override
@@ -20,7 +22,9 @@ public enum Comparison {
     NE("!=") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) != 0;
+			if(a==null) return b != null;
+			else if(b==null) return a != null;
+			else return a.compareTo(b) != 0;
 		}
 
 		@Override
@@ -31,7 +35,8 @@ public enum Comparison {
     GTE(">=") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) >= 0;
+			if(a==null || b ==null) return false;
+			else return a.compareTo(b) >= 0;
 		}
 
 		@Override
@@ -42,18 +47,21 @@ public enum Comparison {
     GT(">") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) > 0;
+			if(a==null || b ==null) return false;
+			else return a.compareTo(b) > 0;
 		}
 
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b, Object c) {
-			return false;
+			if(a==null || b ==null) return false;
+			else return false;
 		}
 	}, 
     LT("<") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) < 0;
+			if(a==null || b ==null) return false;
+			else return a.compareTo(b) < 0;
 		}
 
 		@Override
@@ -64,7 +72,8 @@ public enum Comparison {
     LTE("<=") {
 		@Override
 		protected boolean apply(Comparable<Object> a, Object b) {
-			return a.compareTo(b) <= 0;
+			if(a==null || b ==null) return false;
+			else return a.compareTo(b) <= 0;
 		}
 
 		@Override
@@ -109,7 +118,9 @@ public enum Comparison {
     }
 
 	public boolean compare(Object a, Object b) {
-		if(a.getClass() != Date.class 
+		if(a == null || b == null){
+			return apply(getComparable(a), b);
+		}else if(a.getClass() != Date.class 
 				&& a.getClass() != Timestamp.class 
 				&& a.getClass() != java.sql.Date.class 
 				&& a.getClass() == WraperUtil.wrap(b.getClass())){
@@ -132,7 +143,9 @@ public enum Comparison {
 	}
 	
 	public boolean compare(Object a, Object b, Object c) {
-		if(a.getClass() != Date.class 
+		if(a == null || b == null || c == null){
+			return false;
+		}else if(a.getClass() != Date.class 
 				&& a.getClass() != Timestamp.class 
 				&& a.getClass() != java.sql.Date.class 
 				&& a.getClass() == WraperUtil.wrap(b.getClass()) 
@@ -201,5 +214,20 @@ public enum Comparison {
 		}	
     	return null;
 	}
+    
+    public static Self _self(Object column) {
+		return new Self(column);
+	}
+    
+	public
+	static class Self{
+    	Object column;
+    	public Self(Object column) {
+			this.column = column;
+		}    	
+    	public Object getColumn() {
+			return column;
+		}
+    }
     
 }

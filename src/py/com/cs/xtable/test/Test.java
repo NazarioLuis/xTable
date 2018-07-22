@@ -26,7 +26,9 @@ public class Test {
 		
 		testView.getTable().config(columns);
 		
-		testView.getTable().addCondition(2, Color.green, Comparison.EQ, "2018-07-21");
+		testView.getTable().addCombinedCondition(5, Comparison.EQ, true);
+		testView.getTable().addCombinedCondition(4, Comparison.EQ, "Address2");
+		testView.getTable().setCombinedConditionColor(Color.green);
 
 		List<Customer> customers = new ArrayList<>();
 		

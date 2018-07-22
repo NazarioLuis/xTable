@@ -18,6 +18,8 @@ public class AwesomeTable extends JTable {
 	private static final long serialVersionUID = -1835257686646299108L;
 	private GenericTableModel model;
 	private List<Map<String, Object>> conditions = new ArrayList<Map<String,Object>>();
+	private List<Map<String, Object>> combinedConditions = new ArrayList<Map<String,Object>>();
+	private Color ccColor = Color.blue;
 	private int widthArray[];
 	
 	public AwesomeTable() {
@@ -47,6 +49,19 @@ public class AwesomeTable extends JTable {
 	
 	public void addCondition(int columnIndex, Color color, Comparison comparison, Object value1) {
 		addCondition(columnIndex, color, comparison, value1, null);
+	}
+	
+	public void addCombinedCondition(int columnIndex , Comparison comparison, Object value1, Object value2) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("index", columnIndex);
+		map.put("com", comparison);
+		map.put("v1", value1);
+		map.put("v2", value2);
+		combinedConditions.add(map);
+	}
+	
+	public void addCombinedCondition(int columnIndex, Comparison comparison, Object value1) {
+		addCombinedCondition(columnIndex, comparison, value1, null);
 	}
 
 	private String[] getColumns(String[] columns) {
@@ -87,27 +102,41 @@ public class AwesomeTable extends JTable {
 		if (row == this.getRowCount()-1) {
 			columnModel.getColumn(column).setPreferredWidth(widthArray[column]);
 		}
-		checkConditios(c, row);
+		if(conditions.size()>0) checkConditios(c, row, false,conditions);
+		if(combinedConditions.size()>0) checkConditios(c, row, true, combinedConditions);
 		return c;
 	}	
 
-	private void checkConditios(Component comp, int row) {
+	private void checkConditios(Component comp, int row, boolean combined, List<Map<String, Object>> conditions) {
 		Color color = Color.black;
+		int aux = 0;
 		for (int i = 0; i < conditions.size(); i++) {
 			Comparison comparison = (Comparison) conditions.get(i).get("com");
-			Object value = this.getValueAt(row, (int) conditions.get(i).get("index"));
+			Object colValue = model.getColumnValue(row, conditions.get(i).get("index"));
+			Object v1 = null;
+			Object v2 = null;
+			if(conditions.get(i).get("v1").getClass()==Comparison.Self.class){
+				Object c = ((Comparison.Self) conditions.get(i).get("v1")).getColumn();
+				v1 = model.getColumnValue(row, c);
+			}else v1 = conditions.get(i).get("v1");
 			boolean result;
 			if (comparison == Comparison.BETWEEN) {
-				result = comparison.compare(value,conditions.get(i).get("v1"),conditions.get(i).get("v2"));
+				if(conditions.get(i).get("v2").getClass()==Comparison.Self.class){
+					Object c = ((Comparison.Self) conditions.get(i).get("v2")).getColumn();
+					v2 = model.getColumnValue(row, c);
+				}else v2 = conditions.get(i).get("v2");
+				result = comparison.compare(colValue,v1,v2);
 			}else{
-				result = comparison.compare(value,conditions.get(i).get("v1"));
+				result = comparison.compare(colValue,v1);
 			}
 			
-			if(result) color = (Color) conditions.get(i).get("color");
+			if(result && !combined) color = (Color) conditions.get(i).get("color");
+			if(result && combined) aux ++;
 		}
-		comp.setForeground(color);
+		
+		comp.setForeground((aux > 0 && aux == combinedConditions.size())?ccColor:color);
 	}
-	
-	
-
+	public void setCombinedConditionColor(Color color) {
+		this.ccColor = color;
+	}
 }
