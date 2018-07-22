@@ -17,8 +17,8 @@ String columns[] = {
 
 table.config(columns);
 
-table.addConditions(3, Color.green, Comparison.BETWEEN, 5000, 10000);
-table.addConditions(5, Color.red, Comparison.EQ, false);
+table.addCondition(3, Color.green, Comparison.BETWEEN, 5000, 10000);
+table.addCondition(5, Color.red, Comparison.EQ, false);
 
 List<Customer> customers = new ArrayList<>();
 
